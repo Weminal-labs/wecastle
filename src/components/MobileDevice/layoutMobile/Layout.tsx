@@ -1,15 +1,19 @@
 import styled from "styled-components";
 import { Outlet } from "react-router-dom";
-import Header from "../../components/layout/Header/Header";
-import SideBar from "../../components/layout/SideBar";
-
+// import Header from "../../Header/Header";
+// import SideBar from "../../SideBar/SideBar";
 const LayoutContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: repeat(12, 1fr);
-  gap: 16px;
   height: 100vh;
   backdrop-filter: blur(2px);
+  background: 
+    radial-gradient(circle, transparent 10%, rgba(0, 0, 0, 0.6) 80%),
+    url(../../../../backround-login.png);
+  background-size: cover; /* Adjust as needed */
+  background-position: center; /* Adjust as needed */
+  background-repeat: no-repeat;
 `;
 
 const HeaderWrapper = styled.div`
@@ -23,23 +27,23 @@ const SidebarWrapper = styled.div`
 `;
 
 const MainContentWrapper = styled.div`
-  grid-column: span 10;
-  grid-row: span 11;
-  padding:30px
+  grid-column: span 12;
+  grid-row: span 12;
+  padding: 30px;
 `;
 
 const Layout = () => {
   return (
     <LayoutContainer>
-      <HeaderWrapper>
+      {/* <HeaderWrapper>
         <Header />
       </HeaderWrapper>
       <SidebarWrapper>
         <SideBar />
-      </SidebarWrapper>
+      </SidebarWrapper> */}
       <MainContentWrapper>
         <Outlet />
-      </MainContentWrapper>
+      </MainContentWrapper> 
     </LayoutContainer>
   );
 };

@@ -11,15 +11,8 @@ const AuthLayout = () => {
 
   },[])
   return (
-    <div className="flex h-[100vh] w-full items-center justify-center">
-      <div className="flex  flex-col">
-        <img
-          className="h-[360px] w-[360px]"
-          src={"/logo.png"}
-          alt="logo"
-        />{" "}
+    <div className="flex h-[100vh]  items-center justify-center">
         <Outlet />
-      </div>
     </div>
   );
 };
