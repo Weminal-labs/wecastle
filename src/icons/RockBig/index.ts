@@ -1,1 +1,0 @@
-export { RockBig } from "./RockBig";
