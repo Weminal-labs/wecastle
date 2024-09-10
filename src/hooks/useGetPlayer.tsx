@@ -16,7 +16,7 @@ const useGetPlayer = () => {
       const aptos = new Aptos(aptosConfig);
       
       const payload: InputViewFunctionData = {
-        function: `${MODULE_ADDRESS}::gamev3::get_player_info`,
+        function: `${MODULE_ADDRESS}::gamev1::get_player_info`,
         functionArguments: [address],
       };
 

@@ -1,21 +1,6 @@
-import {
-  Account,
-  Aptos,
-  AptosConfig,
-  Ed25519PrivateKey,
-  Network,
-} from "@aptos-labs/ts-sdk";
-import React, {
-  createContext,
-  useState,
-  useEffect,
-  ReactNode,
-  useCallback,
-} from "react";
-import {
-  useUnityContext,
-  Unity,
-} from "react-unity-webgl";
+import { Account, Aptos, AptosConfig, Ed25519PrivateKey, Network } from "@aptos-labs/ts-sdk";
+import React, { createContext, useState, useEffect, ReactNode, useCallback } from "react";
+import {useUnityContext} from "react-unity-webgl";
 import { MODULE_ADDRESS } from "../utils/Var";
 import { Compare } from "../utils/CompareAddress";
 import { useAlert } from "./AlertProvider";
@@ -30,22 +15,14 @@ interface PickWinner {
   roomId: string;
   userId: string;
 }
-export const UnityGameProvider: React.FC<GameProviderProps> = ({
-  children,
-}) => {
-  const {
-    sendMessage,
-    isLoaded,
-    unityProvider,
-    addEventListener,
-    removeEventListener,
-    unload,
-  } = useUnityContext({
+export const UnityGameProvider: React.FC<GameProviderProps> = ({children}) => {
+  const { sendMessage, isLoaded, unityProvider, addEventListener, removeEventListener, unload} = useUnityContext({
     loaderUrl: "build/Build/Build.loader.js",
     dataUrl: "build/Build/Build.data",
     frameworkUrl: "build/Build/Build.framework.js",
     codeUrl: "build/Build/Build.wasm",
   });
+  
   const { setAlert } = useAlert();
 
   const [show, setShow] = useState(false);

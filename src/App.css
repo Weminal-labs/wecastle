@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+/* 
 @font-face {
   font-family: 'Nord';
   src: url('/font/TTF/Nord-Regular.ttf') format('truetype');
@@ -21,10 +21,16 @@
   src: url('/font/TTF/Nord-Italic.ttf') format('truetype');
   font-weight: normal;
   font-style: italic;
+} */
+
+.vt323-regular {
+  font-family: "VT323", monospace;
+  font-weight: 400;
+  font-style: normal;
 }
 
-
 body, html {
+  font-family: 'VT323', monospace;
   margin: 0;
   padding: 0;
   height: 100%;

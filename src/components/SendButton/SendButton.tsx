@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
 import { useSendAptos } from "../../hooks/useSendAptos";
-import { ButtonFaucet } from "../layout/CreateAccout/CreateAccount.styled";
+import { ButtonFaucet } from "../CreateAccout/CreateAccount.styled";
 import { useAlert } from "../../contexts/AlertProvider";
 import CustomButton from "../buttons/CustomButton";
 

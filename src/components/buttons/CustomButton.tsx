@@ -1,31 +1,42 @@
 import React from 'react';
 import styled from 'styled-components';
+
 interface CustomButtonProps {
-    content: string;
-    isMain: boolean;
-    onClick: () => void;
-    disabled: boolean
-  }
-  
-const CustomButton = ({ content, isMain, onClick, disabled }: CustomButtonProps) => {
+  content: string;
+  onClick: () => void;
+  disabled: boolean;
+}
+
+const CustomButton = ({ content, onClick, disabled }: CustomButtonProps) => {
   return (
-    <ButtonStyled $isMain={isMain} onClick={onClick} disabled={disabled}>
-      {content}
-    </ButtonStyled>
+    <ButtonContainer>
+      <ButtonStyled onClick={onClick} disabled={disabled}>
+        {content}
+      </ButtonStyled>
+    </ButtonContainer>
   );
 };
 
+// Styled component for the button container
+const ButtonContainer = styled.div`
+  display: inline-block;
+  padding: 3px; 
+  background-color: black;
+  margin-top: 10px;
+`;
+
 // Styled component for the button
-const ButtonStyled = styled.button<{ $isMain: boolean }>`
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: 1px solid white; 
+const ButtonStyled = styled.button`
+  width: 120px;
+  height: 40px;
+  font-size: 18px;
+  border: 3px solid #777;
+  border-top: none;
+  border-left: none;  
   letter-spacing: 2px;
   cursor: pointer;
-  color: white;
-  background-color: ${({ $isMain }) => ($isMain ? '#41646A' : '#152D31')};
-  width: 100%;
+  color: black;
+  background-color: white;
 `;
 
 export default CustomButton;
