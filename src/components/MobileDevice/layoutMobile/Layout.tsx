@@ -7,9 +7,8 @@ const LayoutContainer = styled.div`
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: repeat(12, 1fr);
   height: 100vh;
-  backdrop-filter: blur(2px);
   background: 
-    radial-gradient(circle, transparent 10%, rgba(0, 0, 0, 0.6) 80%),
+    radial-gradient(circle, transparent 20%, rgba(0, 0, 0, 0.7) 100%),
     url(../../../../backround-login.png);
   background-size: cover; /* Adjust as needed */
   background-position: center; /* Adjust as needed */
@@ -29,7 +28,6 @@ const SidebarWrapper = styled.div`
 const MainContentWrapper = styled.div`
   grid-column: span 12;
   grid-row: span 12;
-  padding: 30px;
 `;
 
 const Layout = () => {

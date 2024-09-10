@@ -5,41 +5,35 @@ interface CustomInputProps {
     value: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     placeholder?: string;
-    isMain?: boolean;
     disabled?: boolean;
 }
 
-const CustomInput = ({ value, onChange, placeholder, isMain = false, disabled = false }: CustomInputProps) => {
+const CustomInput = ({ value, onChange, placeholder, disabled = false }: CustomInputProps) => {
     return (
         <TextFieldStyled 
             value={value} 
             onChange={onChange} 
             placeholder={placeholder}
-            isMain={isMain}
             disabled={disabled}
         />
     );
 };
 
 // Styled component for the input field
-const TextFieldStyled = styled.input<{ isMain?: boolean }>` 
+const TextFieldStyled = styled.input` 
+    font-family: 'VT323', monospace;
     padding: 10px;
-    font-size: 12px;
-    border-radius: 5px;
-    border: 2px solid transparent; /* Border is transparent initially */
-    background-color: ${({ isMain }) => (isMain ? '#152D31' : '#E0E0E0')};
-    color: ${({ isMain }) => (isMain ? '#F0F4F4' : '#333')};
-    width: 100%;
+    font-size: 18px;
+    border: 3px solid black;
+    background-color: white;
+    color: black;
+    width: 200px;
+    height: 30px;
     box-sizing: border-box;
     outline: none;
-    transition: border-color 0.3s;
-    
-    /* Border gradient effect */
-    border-image: linear-gradient(to right, rgba(255, 222, 100, 0.3), rgba(67, 49, 0, 0.3)); 
-    border-image-slice: 1;
-    
+
     &:focus {
-        border-color: ${({ isMain }) => (isMain ? '#1E2A2A' : '#0D3B3A')};
+        border-color: #1E2A2A;
     }
 
     &:disabled {

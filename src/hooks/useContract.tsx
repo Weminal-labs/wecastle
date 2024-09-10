@@ -37,7 +37,7 @@ const useContract = () => {
       const response = await signAndSubmitTransaction({
         sender: address ?? "",
         data: {
-          function: `${MODULE_ADDRESS}::gamev3::${functionName}`,
+          function: `${MODULE_ADDRESS}::gamev1::${functionName}`,
           functionArguments: functionArgs,
         },
       });
