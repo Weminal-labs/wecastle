@@ -8,7 +8,7 @@ import { LoginPage } from "./components/MobileDevice/Login/Login";
 import { CallbackPage } from "./components/MobileDevice/layoutMobile/Callback";
 import AuthLayout from "./components/MobileDevice/layoutMobile/AuthLayout";
 import RequireAuth from "./components/MobileDevice/layoutMobile/RequireAuth";
-import PlayGame from "./components/MobileDevice/PlayGame/PlayGamePage";
+import PlayGame from "./components/MobileDevice/PlayGame/PlayGame";
 import Faucet from "./pages/main/Faucet";
 import CreateAccount from "./components/CreateAccout/CreateAccount";
 import HomeMobile from "./components/MobileDevice/homeMobile/HomeMobile";
