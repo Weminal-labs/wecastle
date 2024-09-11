@@ -8,8 +8,8 @@ export const useUnityGame = () => useContext(UnityGameContext);
 
 const UnityGame = styled(Unity)`
   border-radius: 12px;
-  width: 1000px;
-  height: 500px;
+  width: 300px;
+  height: 200px;
 `;
 
 const UnityGameComponent = forwardRef((props, ref) => {
