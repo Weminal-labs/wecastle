@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import "@fontsource/vt323";
 import SideBar from "../../layout/SideBar";
 import MobileHeader from "../../layout/Header/MobileHeader";
@@ -35,6 +35,9 @@ const HeaderWrapper = styled.div`
 `;
 
 const Layout = () => {
+  const location = useLocation();
+  const hideSidebarRoutes = ["/marketplace"];
+
   return (
     <LayoutContainer>
       <HeaderWrapper>
@@ -43,9 +46,11 @@ const Layout = () => {
       <MainContentWrapper>
         <Outlet />
       </MainContentWrapper>
-      <SideBarWrapper>
-        <SideBar />
-      </SideBarWrapper>
+      {!hideSidebarRoutes.includes(location.pathname) && (
+        <SideBarWrapper>
+          <SideBar />
+        </SideBarWrapper>
+      )}
     </LayoutContainer>
   );
 };
