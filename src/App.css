@@ -24,17 +24,19 @@
 } */
 
 .vt323-regular {
-  font-family: "VT323", monospace;
+  font-family: "VT323", monospace !important;
   font-weight: 400;
   font-style: normal;
 }
 
 body, html {
-  font-family: 'VT323', monospace;
+  font-family: 'VT323', monospace !important;
   margin: 0;
   padding: 0;
   height: 100%;
   width: 100%;
+  font-size: 14px;
+  line-height: 1.5;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -48,7 +50,26 @@ body, html {
   height: 100%;
   width: 100%;
   background-color: black;
-  background-image: url('/background.png');
+  background: 
+  radial-gradient(
+    72.4% 40.52% at 50% 50%,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(0, 0, 0, 0.6) 100%
+  ), url('/background.png');
   background-size: cover; /* This will make the background cover the entire area */
   background-position: center; /* This centers the background image */
+}
+
+.pixel-button {
+  box-shadow:   -2px 0 0 0 black,
+                 2px 0 0 0 black,
+                 0 -2px 0 0 black,
+                 0 2px 0 0 black;
+}
+
+.pixel-button-white {
+  box-shadow:   -2px 0 0 0 white,
+                 2px 0 0 0 white,
+                 0 -2px 0 0 white,
+                 0 2px 0 0 white;
 }

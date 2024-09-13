@@ -1,30 +1,64 @@
-import { ContentCopy } from "@mui/icons-material";
-import { shortenAddress } from "../../../utils/Shorten";
-import MenuIcon from '@mui/icons-material/Menu';
-import PlayGame from "../PlayGame/PlayGame";
+import { MdOutlineShoppingCart } from "react-icons/md";
+import PixelCustom from "../../buttons/PixelCustom";
+import { FaRegClock } from "react-icons/fa";
+import { FaKey } from "react-icons/fa";
 
 const HomeMobile = () => {
-  const address = localStorage.getItem("address") ?? "";
 
   return (
-    <div className="w-full h-full flex flex-col  items-center">
-      <header className='w-full h-[60px] flex flex-row justify-between items-center mb-[60px]'>
-        <div className='flex-1 flex justify-center ml-[70px]'>
-          <h2 className="text-white font-vt323">
-            <ContentCopy onClick={() => navigator.clipboard.writeText(address)} />
-            <span style={{ marginLeft: '5px' }}>{shortenAddress(address, 5)}</span>
-          </h2>
+    <div className="mx-auto flex h-[90vh] w-full max-w-screen-sm flex-col items-center px-8">
+      <div className="flex w-full flex-grow flex-col py-16 text-white justify-center">
+        {/* game */}
+        <div className="relative aspect-video w-full border-2 border-black p-4">
+          <img
+            src="/game-map/wecastle-map-1.png"
+            className="absolute left-0 top-0 z-0 h-full w-full object-cover brightness-75"
+          />
+          <div className="relative z-10 flex h-full w-full flex-col justify-between">
+            <div className="w-full text-2xl">Map: 01</div>
+            <div className="flex w-full justify-end">
+              <button className="border-2 border-white px-10 py-2 text-2xl hover:bg-white">
+                Play
+              </button>
+            </div>
+          </div>
         </div>
-        <MenuIcon style={{ color: 'white', margin: '20px', fontSize: '40px' }} />
-      </header>
-
-      {/* game */}
-      <div className="w-[300px] h-[200px] border-2 border-white">
-        <PlayGame />
+        <div className="flex w-full flex-col">
+          <h1 className="py-10 text-3xl">Activities</h1>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex aspect-square w-full flex-col items-center space-y-2 border-2 border-black bg-mainColor p-4 text-[#CACACA]">
+              <div className="flex flex-grow flex-col items-center justify-center">
+                <MdOutlineShoppingCart className="text-5xl" />
+                <h1 className="text-2xl">marketplace</h1>
+              </div>
+              <PixelCustom>
+                <button className="w-32 bg-white text-2xl text-black">
+                  Open
+                </button>
+              </PixelCustom>
+            </div>
+            <div className="flex aspect-square w-full flex-col items-center space-y-4 border-2 border-black bg-mainColor p-4 text-xl">
+              <div className="flex w-full flex-grow flex-col border-2 border-black bg-white">
+                <div className="flex items-center justify-center bg-[#9F9F9F] text-black">
+                  <FaRegClock />
+                  23h30m
+                </div>
+                <div className="flex flex-grow items-center justify-center space-x-2 bg-white text-black">
+                  <FaKey />
+                  <p className=" ">3 credits</p>
+                </div>
+              </div>
+              <PixelCustom>
+                <button className="w-32 bg-white text-2xl text-black">
+                  Claim
+                </button>
+              </PixelCustom>
+            </div>
+          </div>
+        </div>
       </div>
-    </div> 
-  )
-}
+    </div>
+  );
+};
 
-
-export default HomeMobile
+export default HomeMobile;

@@ -9,7 +9,6 @@ import { CallbackPage } from "./components/MobileDevice/layoutMobile/Callback";
 import AuthLayout from "./components/MobileDevice/layoutMobile/AuthLayout";
 import RequireAuth from "./components/MobileDevice/layoutMobile/RequireAuth";
 import PlayGame from "./components/MobileDevice/PlayGame/PlayGame";
-import Faucet from "./pages/main/Faucet";
 import CreateAccount from "./components/CreateAccout/CreateAccount";
 import HomeMobile from "./components/MobileDevice/homeMobile/HomeMobile";
 
@@ -20,14 +19,12 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route element={<RequireAuth />}>
             <Route path="/playGame" element={<PlayGame />} />
-            <Route path="/leaderboard" element={<Leaderboard />} />
-            <Route path="/faucet" element={<Faucet />} />
             <Route path="/create-account" element={<CreateAccount />} />
             <Route path="/" element={<HomeMobile />} />
           </Route>
-          <Route path="/auth" element={<AuthLayout />}>
-            <Route path="login" element={<LoginPage />} />
-          </Route>
+        </Route>
+        <Route path="/auth" element={<AuthLayout />}>
+          <Route path="login" element={<LoginPage />} />
         </Route>
         <Route path="callback" element={<CallbackPage />} />
       </Routes>
