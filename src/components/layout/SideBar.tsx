@@ -12,12 +12,12 @@ const items = [
 
 const SideBar = () => {
   return (
-    <div className="flex w-full justify-between px-5 pb-10">
+    <div className="flex w-full justify-between px-5 py-10">
       {items.map((item, index) => {
         return (
           <div key={index}>
-            <PixelCustom className="pixel-button-white flex w-24 justify-center py-3">
-              <NavLink to={item.to} className="text-xl text-white">
+            <PixelCustom className="pixel-button-white flex justify-center">
+              <NavLink to={item.to} className="text-xl text-white !w-20 text-center py-3">
                 {item.text}
               </NavLink>
             </PixelCustom>

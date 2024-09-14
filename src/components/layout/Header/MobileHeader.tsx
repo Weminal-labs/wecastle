@@ -8,7 +8,7 @@ const MobileHeader = () => {
   const [address, setAddress] = useState(localStorage.getItem("address") ?? "");
 
   return (
-    <header className="flex w-full flex-row items-center justify-between py-4">
+    <header className="flex w-full flex-row items-center justify-between py-4 px-4">
       <div className="flex flex-1 justify-center">
         <h2 className="font-vt323 flex items-center space-x-2 text-6xl text-white">
           <ContentCopy onClick={() => navigator.clipboard.writeText(address)} />

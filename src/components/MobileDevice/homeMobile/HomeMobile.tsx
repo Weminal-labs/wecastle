@@ -2,14 +2,14 @@ import { MdOutlineShoppingCart } from "react-icons/md";
 import PixelCustom from "../../buttons/PixelCustom";
 import { FaRegClock } from "react-icons/fa";
 import { FaKey } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const HomeMobile = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="mx-auto flex h-[90vh] w-full max-w-screen-sm flex-col items-center px-8">
-      <div className="flex w-full flex-grow flex-col py-16 text-white justify-center">
+    <div className="mx-auto flex h-full w-full max-w-screen-sm flex-col items-center px-8">
+      <div className="flex w-full flex-grow flex-col justify-center py-16 text-white">
         {/* game */}
         <div className="relative aspect-video w-full border-2 border-black p-4">
           <img
@@ -19,9 +19,12 @@ const HomeMobile = () => {
           <div className="relative z-10 flex h-full w-full flex-col justify-between">
             <div className="w-full text-2xl">Map: 01</div>
             <div className="flex w-full justify-end">
-              <button className="border-2 border-white px-10 py-2 text-2xl hover:bg-white">
+              <Link
+                to="/playGame"
+                className="border-2 border-white px-10 py-2 text-2xl hover:bg-white"
+              >
                 Play
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -34,7 +37,10 @@ const HomeMobile = () => {
                 <h1 className="text-2xl">marketplace</h1>
               </div>
               <PixelCustom>
-                <button className="w-32 bg-white text-2xl text-black" onClick={() => navigate("/marketplace")}>
+                <button
+                  className="w-32 bg-white text-2xl text-black"
+                  onClick={() => navigate("/marketplace")}
+                >
                   Open
                 </button>
               </PixelCustom>

@@ -26,7 +26,7 @@ const Marketplace = () => {
   return (
     <div className="mx-auto flex h-[100vh] w-full max-w-screen-sm flex-col items-center pt-20 ">
       <div className="w-full h-full bg-[#C48D5D] rounded-t-2xl p-10 text-white">
-        <div className=" text-xl" onClick={() => navigate("/")}>
+        <div className=" text-xl cursor-pointer" onClick={() => navigate("/")}>
           Back
         </div>
         <h1 className="text-3xl text-center mb-5">Marketplace</h1>

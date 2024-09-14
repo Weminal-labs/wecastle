@@ -27,6 +27,7 @@ function App() {
             <Route path="/" element={<HomeMobile />} />
           </Route>
         </Route>
+        <Route path="/create-account" element={<CreateAccount />} />
         <Route path="/auth" element={<AuthLayout />}>
           <Route path="login" element={<LoginPage />} />
         </Route>
