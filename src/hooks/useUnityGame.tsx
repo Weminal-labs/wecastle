@@ -7,34 +7,14 @@ import { Box } from "@mui/material";
 export const useUnityGame = () => useContext(UnityGameContext);
 
 const UnityGame = styled(Unity)`
-  border-radius: 12px;
-  width: 300px;
-  height: 200px;
+  width: 100%;
+  height: 100%;
 `;
 
 const UnityGameComponent = forwardRef((props, ref) => {
   const { unityProvider } = useUnityGame();
 
-  return (
-    <Box sx={style}>
-      <UnityGame  unityProvider={unityProvider} />
-    </Box>
-  );
+  return <UnityGame unityProvider={unityProvider} />;
 });
-
-const style = {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "70%",
-  height: "75%",
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 3,
-};
 
 export default UnityGameComponent;

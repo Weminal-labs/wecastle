@@ -1,6 +1,18 @@
-import { Account, Aptos, AptosConfig, Ed25519PrivateKey, Network } from "@aptos-labs/ts-sdk";
-import React, { createContext, useState, useEffect, ReactNode, useCallback } from "react";
-import {useUnityContext} from "react-unity-webgl";
+import {
+  Account,
+  Aptos,
+  AptosConfig,
+  Ed25519PrivateKey,
+  Network,
+} from "@aptos-labs/ts-sdk";
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  ReactNode,
+  useCallback,
+} from "react";
+import { useUnityContext } from "react-unity-webgl";
 import { MODULE_ADDRESS } from "../utils/Var";
 import { Compare } from "../utils/CompareAddress";
 import { useAlert } from "./AlertProvider";
@@ -16,17 +28,18 @@ interface GameProviderProps {
 //   roomId: string;
 //   userId: string;
 // }
-export const UnityGameProvider: React.FC<GameProviderProps> = ({children}) => {
-  const { isLoaded, unityProvider} = useUnityContext({
+export const UnityGameProvider: React.FC<GameProviderProps> = ({
+  children,
+}) => {
+  const { isLoaded, unityProvider } = useUnityContext({
     loaderUrl: "build/Build/Build.loader.js",
     dataUrl: "build/Build/Build.data",
     frameworkUrl: "build/Build/Build.framework.js",
     codeUrl: "build/Build/Build.wasm",
   });
 
+  console.log("game loaded?", isLoaded);
 
-  console.log('game loaded?', isLoaded)
-  
   // const [show, setShow] = useState(false);
   // const handleUnload = async () => {
   //   await unload();
@@ -48,12 +61,12 @@ export const UnityGameProvider: React.FC<GameProviderProps> = ({children}) => {
 
   //   try {
   //     const transaction = await aptos.transaction.build.simple({
-  //       sender: accountAddress, 
+  //       sender: accountAddress,
   //       data: {
   //         function: FUNCTION_NAME,
   //         functionArguments: [
   //           roomId,
-  //           winner, 
+  //           winner,
   //         ],
   //       },
   //     });
@@ -71,7 +84,7 @@ export const UnityGameProvider: React.FC<GameProviderProps> = ({children}) => {
 
   //     // Log the executed transaction
   //     console.log("Executed Transaction:", executedTransaction);
-  //     const alertContent = 
+  //     const alertContent =
   //       <>
   //         Transaction:{" "}
   //         <a
@@ -82,9 +95,8 @@ export const UnityGameProvider: React.FC<GameProviderProps> = ({children}) => {
   //           {executedTransaction.hash}
   //         </a>
   //       </>
-    
-      
-  //     setAlert(alertContent, "success"); 
+
+  //     setAlert(alertContent, "success");
   //   } catch (error) {
   //         // @ts-ignore
 
@@ -94,14 +106,13 @@ export const UnityGameProvider: React.FC<GameProviderProps> = ({children}) => {
   // };
 
   // const handleUnityApplicationQuit = useCallback(() => {
-  //   unload(); 
+  //   unload();
   // }, []);
 
   // const handleUnityApplicationFinish = useCallback((jsonData: any) => {
   //   const data: PickWinner = JSON.parse(jsonData);
   //   const address = localStorage.getItem("address")
 
-  
   //   if(Compare(data.userId,address!,5)){
   //       console.log("Data received from Unity on quit:", data.userId);
   //       pickWinnerByRoomId(Number(data.roomId),data.userId)

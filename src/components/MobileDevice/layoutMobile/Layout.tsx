@@ -8,7 +8,7 @@ const LayoutContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: repeat(12, 1fr);
-  height: 100vh;
+  height: 100svh;
   background: radial-gradient(
       72.4% 40.52% at 50% 50%,
       rgba(255, 255, 255, 0) 0%,
@@ -31,7 +31,6 @@ const SideBarWrapper = styled.div`
 
 const HeaderWrapper = styled.div`
   grid-column: span 12;
-  grid-row: span 12;
 `;
 
 const Layout = () => {

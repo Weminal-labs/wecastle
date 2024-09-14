@@ -8,22 +8,19 @@ const PlayGame: React.FC = () => {
 
   useEffect(() => {
     if (isLoaded) {
-      setLoadGame(true);
+      setLoadGame(false);
     }
   }, [isLoaded]);
 
   return (
     <>
-        {loadGame && (
-          <Modal
-            open={true}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <UnityGameComponent />
-          </Modal>
-        )}
-        hello
+      {!loadGame ? (
+        <div className="h-full w-full">
+          <UnityGameComponent />
+        </div>
+      ) : (
+        <p>Loading...</p>
+      )}
     </>
   );
 };
