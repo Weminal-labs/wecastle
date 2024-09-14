@@ -11,9 +11,6 @@ const RequireAuth = () => {
   const { connected, isLoading } = useWallet();
   const [progress, setProgress] = useState(0);
   const [checkUpdate, setCheckUpdate] = useState(true);
-  // useEffect(() => {
-  //   console.log('hehe',connected)
-  // }, []);
 
   useEffect(() => {
     if (isLoading) {

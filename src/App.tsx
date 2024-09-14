@@ -11,6 +11,8 @@ import RequireAuth from "./components/MobileDevice/layoutMobile/RequireAuth";
 import PlayGame from "./components/MobileDevice/PlayGame/PlayGame";
 import CreateAccount from "./components/CreateAccout/CreateAccount";
 import HomeMobile from "./components/MobileDevice/homeMobile/HomeMobile";
+import Profile from "./components/MobileDevice/profile/Profile";
+import Marketplace from "./components/MobileDevice/marketplace/Marketplace";
 
 function App() {
   return (
@@ -19,6 +21,9 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route element={<RequireAuth />}>
             <Route path="/playGame" element={<PlayGame />} />
+            <Route path="/create-account" element={<CreateAccount />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/" element={<HomeMobile />} />
           </Route>
         </Route>

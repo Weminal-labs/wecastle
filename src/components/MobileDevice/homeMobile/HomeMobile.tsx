@@ -2,7 +2,7 @@ import { MdOutlineShoppingCart } from "react-icons/md";
 import PixelCustom from "../../buttons/PixelCustom";
 import { FaRegClock } from "react-icons/fa";
 import { FaKey } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
 
 const HomeMobile = () => {
   return (
@@ -35,7 +35,10 @@ const HomeMobile = () => {
                 <h1 className="text-2xl">marketplace</h1>
               </div>
               <PixelCustom>
-                <button className="w-32 bg-white text-2xl text-black">
+                <button
+                  className="w-32 bg-white text-2xl text-black"
+                  onClick={() => redirect("/marketplace")}
+                >
                   Open
                 </button>
               </PixelCustom>
