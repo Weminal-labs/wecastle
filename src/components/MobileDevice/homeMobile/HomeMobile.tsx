@@ -2,9 +2,11 @@ import { MdOutlineShoppingCart } from "react-icons/md";
 import PixelCustom from "../../buttons/PixelCustom";
 import { FaRegClock } from "react-icons/fa";
 import { FaKey } from "react-icons/fa";
-import { Link, redirect } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const HomeMobile = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="mx-auto flex h-full w-full max-w-screen-sm flex-col items-center px-8">
       <div className="flex w-full flex-grow flex-col justify-center py-16 text-white">
@@ -37,7 +39,7 @@ const HomeMobile = () => {
               <PixelCustom>
                 <button
                   className="w-32 bg-white text-2xl text-black"
-                  onClick={() => redirect("/marketplace")}
+                  onClick={() => navigate("/marketplace")}
                 >
                   Open
                 </button>
