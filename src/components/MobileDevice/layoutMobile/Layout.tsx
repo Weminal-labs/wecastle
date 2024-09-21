@@ -1,28 +1,22 @@
 import styled from "styled-components";
-import { Outlet } from "react-router-dom";
-// import Header from "../../Header/Header";
-// import SideBar from "../../SideBar/SideBar";
+import { Outlet, useLocation } from "react-router-dom";
+import "@fontsource/vt323";
+import SideBar from "../../layout/SideBar";
+import MobileHeader from "../../layout/Header/MobileHeader";
+
 const LayoutContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: repeat(12, 1fr);
-  height: 100vh;
-  background: 
-    radial-gradient(circle, transparent 20%, rgba(0, 0, 0, 0.7) 100%),
-    url(../../../../backround-login.png);
+  height: 100svh;
+  background: radial-gradient(
+      72.4% 40.52% at 50% 50%,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(0, 0, 0, 0.6) 100%
+    )
   background-size: cover; /* Adjust as needed */
   background-position: center; /* Adjust as needed */
   background-repeat: no-repeat;
-`;
-
-const HeaderWrapper = styled.div`
-  grid-column: span 12;
-  grid-row: span 1;
-`;
-
-const SidebarWrapper = styled.div`
-  grid-column: span 2;
-  grid-row: span 11;
 `;
 
 const MainContentWrapper = styled.div`
@@ -30,18 +24,32 @@ const MainContentWrapper = styled.div`
   grid-row: span 12;
 `;
 
+const SideBarWrapper = styled.div`
+  grid-column: span 12;
+  grid-row: span 12;
+`;
+
+const HeaderWrapper = styled.div`
+  grid-column: span 12;
+`;
+
 const Layout = () => {
+  const location = useLocation();
+  const hideSidebarRoutes = ["/marketplace", "/playGame"];
+
   return (
     <LayoutContainer>
-      {/* <HeaderWrapper>
-        <Header />
+      <HeaderWrapper>
+        <MobileHeader />
       </HeaderWrapper>
-      <SidebarWrapper>
-        <SideBar />
-      </SidebarWrapper> */}
       <MainContentWrapper>
         <Outlet />
-      </MainContentWrapper> 
+      </MainContentWrapper>
+      {!hideSidebarRoutes.includes(location.pathname) && (
+        <SideBarWrapper>
+          <SideBar />
+        </SideBarWrapper>
+      )}
     </LayoutContainer>
   );
 };

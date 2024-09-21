@@ -5,7 +5,6 @@ import { useAptimusFlow } from "aptimus-sdk-test/react";
 import { AptimusNetwork } from "aptimus-sdk-test";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 
-
 interface useContractProps {
   functionName: string;
   functionArgs: any[];
@@ -18,7 +17,7 @@ const useContract = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<null | string>(null);
   // const flow = useAptimusFlow();
-  const { signAndSubmitTransaction, disconnect}=useWallet()
+  const { signAndSubmitTransaction, disconnect, wallet, connected } = useWallet();
   const callContract = async ({
     functionName,
     functionArgs,
@@ -28,7 +27,7 @@ const useContract = () => {
   }: useContractProps) => {
     const aptosConfig = new AptosConfig({ network: Network.TESTNET });
     const aptos = new Aptos(aptosConfig);
-    const address = localStorage.getItem("address")
+    const address = localStorage.getItem("address");
 
     try {
       setLoading(true);
@@ -42,25 +41,20 @@ const useContract = () => {
         },
       });
 
-      const committedTransaction=await aptos.waitForTransaction({ transactionHash: response.hash });
+      const committedTransaction = await aptos.waitForTransaction({
+        transactionHash: response.hash,
+      });
 
       if (onSuccess) {
         onSuccess(committedTransaction);
       }
-    } catch (error: any) { 
-      console.log(error.message)
+    } catch (error: any) {
+      console.log(error.message);
       if (error.status === 400) {
-        disconnect
-        localStorage.clear()
+        disconnect;
+        localStorage.clear();
         window.location.reload();
       }
-      // if(error.message==="Missing required data for execution."){
-      //   disconnect        
-        
-      //   localStorage.clear()
-      //   window.location.reload();
-      // }
-      // Handle error here
       setError(error.toString());
       if (onError) {
         onError(error);

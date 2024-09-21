@@ -8,10 +8,11 @@ import { LoginPage } from "./components/MobileDevice/Login/Login";
 import { CallbackPage } from "./components/MobileDevice/layoutMobile/Callback";
 import AuthLayout from "./components/MobileDevice/layoutMobile/AuthLayout";
 import RequireAuth from "./components/MobileDevice/layoutMobile/RequireAuth";
-import PlayGame from "./components/MobileDevice/PlayGame/PlayGamePage";
-import Faucet from "./pages/main/Faucet";
+import PlayGame from "./components/MobileDevice/PlayGame/PlayGame";
 import CreateAccount from "./components/CreateAccout/CreateAccount";
 import HomeMobile from "./components/MobileDevice/homeMobile/HomeMobile";
+import Profile from "./components/MobileDevice/profile/Profile";
+import Marketplace from "./components/MobileDevice/marketplace/Marketplace";
 
 function App() {
   return (
@@ -20,14 +21,15 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route element={<RequireAuth />}>
             <Route path="/playGame" element={<PlayGame />} />
-            <Route path="/leaderboard" element={<Leaderboard />} />
-            <Route path="/faucet" element={<Faucet />} />
             <Route path="/create-account" element={<CreateAccount />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/" element={<HomeMobile />} />
           </Route>
-          <Route path="/auth" element={<AuthLayout />}>
-            <Route path="login" element={<LoginPage />} />
-          </Route>
+        </Route>
+        <Route path="/create-account" element={<CreateAccount />} />
+        <Route path="/auth" element={<AuthLayout />}>
+          <Route path="login" element={<LoginPage />} />
         </Route>
         <Route path="callback" element={<CallbackPage />} />
       </Routes>
