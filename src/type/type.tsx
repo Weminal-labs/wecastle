@@ -21,11 +21,12 @@ export type PlayerInfo = {
   current_round: number;
   game_finished: boolean;
   hero_owned: string;
-  name: string; 
-  round1_finish_time: string; 
-  round1_play_time: string; 
+  name: string;
+  last_claim_time: string;
+  round1_finish_time: string;
+  round1_play_time: string;
   round2_finish_time: string;
-  round2_play_time: string
+  round2_play_time: string;
   round3_finish_time: string;
-  round3_play_time: string
+  round3_play_time: string;
 };

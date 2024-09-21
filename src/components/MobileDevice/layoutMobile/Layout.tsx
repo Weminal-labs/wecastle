@@ -35,7 +35,7 @@ const HeaderWrapper = styled.div`
 
 const Layout = () => {
   const location = useLocation();
-  const hideSidebarRoutes = ["/marketplace"];
+  const hideSidebarRoutes = ["/marketplace", "/playGame"];
 
   return (
     <LayoutContainer>

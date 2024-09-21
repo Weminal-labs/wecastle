@@ -26,8 +26,6 @@ const Profile = () => {
 
   const fetchPlayerInfo = async (address: string) => {
     const player = await fetchPlayer(address);
-    const aptosConfig = new AptosConfig({ network: Network.TESTNET });
-    const aptos = new Aptos(aptosConfig);
 
     if (player) {
       setPlayerInfo(player);
