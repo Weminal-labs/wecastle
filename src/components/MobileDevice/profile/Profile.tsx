@@ -12,6 +12,7 @@ const Profile = () => {
     game_finished: true,
     hero_owned: "",
     name: "",
+    last_claim_time: "",
     round1_finish_time: "",
     round1_play_time: "",
     round2_finish_time: "",
