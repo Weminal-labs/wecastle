@@ -136,8 +136,12 @@ const HomeMobile = () => {
             <div className="flex aspect-square w-full flex-col items-center space-y-4 border-2 border-black bg-mainColor p-4 text-xl">
               <div className="flex w-full flex-grow flex-col border-2 border-black bg-white">
                 <div className="flex items-center justify-center space-x-1 bg-[#9F9F9F] text-black">
-                  <FaRegClock />
-                  <Timer expiryTimestamp={expiryTimestamp} />
+                  {new Date() < expiryTimestamp && (
+                    <>
+                      <FaRegClock />
+                      <Timer expiryTimestamp={expiryTimestamp} />
+                    </>
+                  )}
                 </div>
                 <div className="flex flex-grow items-center justify-center space-x-2 bg-white text-black">
                   <FaKey />
