@@ -19,25 +19,26 @@ import { useAlert } from "../../contexts/AlertProvider";
 import useContract from "../../hooks/useContract";
 import CustomButton from "../buttons/CustomButton";
 import CustomInput from "../input/CustomInput";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
 
 const CreateAccount = () => {
   const [username, setUsername] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const address = localStorage.getItem("address");
   const { callContract } = useContract();
   const { setAlert } = useAlert();
+  const { connected, account } = useWallet();
 
   useEffect(() => {
     const fetchData = async () => {
-      if (address) {
+      if (account?.address) {
         try {
           setLoading(true);
           const aptosConfig = new AptosConfig({ network: Network.TESTNET });
           const aptos = new Aptos(aptosConfig);
           const payload: InputViewFunctionData = {
             function: `${MODULE_ADDRESS}::gamev1::get_player_info`,
-            functionArguments: [address],
+            functionArguments: [account?.address],
           };
           await aptos.view({ payload });
 
@@ -45,7 +46,6 @@ const CreateAccount = () => {
           window.location.href = "/";
         } catch (error) {
           setLoading(false);
-          console.log(address);
 
           console.log(error);
         }
@@ -54,10 +54,9 @@ const CreateAccount = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [account]);
 
   const handleSubmit = async () => {
-
     if (!(username && name)) {
       setAlert("All fields must be filled.", "info");
       return;
@@ -86,16 +85,6 @@ const CreateAccount = () => {
       },
     });
   };
-
-  // if (loadingFetch) {
-  //   return <CircularProgress />;
-  // }
-
-  // const handleLogout = () => {
-  //   localStorage.clear();
-  //   flow.logout();
-  //   window.location.href = "/";
-  // };\
 
   return (
     <Modal open={true}>

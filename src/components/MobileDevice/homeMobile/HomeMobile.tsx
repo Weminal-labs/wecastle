@@ -3,11 +3,11 @@ import PixelCustom from "../../buttons/PixelCustom";
 import { FaRegClock } from "react-icons/fa";
 import { FaKey } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import useGetPlayer from "../../../hooks/useGetPlayer";
+import { useEffect, useState, useContext } from "react";
 import useCredit from "../../../hooks/useCredit";
-import { PlayerInfo } from "../../../type/type";
 import Timer from "../../timer/Timer";
+import AuthContext from "../../../contexts/AuthProvider";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
 
 const maps = [
   {
@@ -26,38 +26,20 @@ const maps = [
 
 const HomeMobile = () => {
   const navigate = useNavigate();
-  const address = localStorage.getItem("address") ?? "";
-  const { fetchPlayer } = useGetPlayer();
   const { fetchCredit, claimCredit } = useCredit();
-  const [playerInfo, setPlayerInfo] = useState<PlayerInfo>({
-    address_id: "",
-    current_round: 0,
-    game_finished: true,
-    hero_owned: "",
-    name: "",
-    last_claim_time: "",
-    round1_finish_time: "",
-    round1_play_time: "",
-    round2_finish_time: "",
-    round2_play_time: "",
-    round3_finish_time: "",
-    round3_play_time: "",
-  });
+  const auth = useContext(AuthContext);
+  const { connected, account } = useWallet();
+
   const [CreditInfor, setCreditInfor] = useState<number>(0);
   const [expiryTimestamp, setExpiryTimestamp] = useState(new Date());
 
   useEffect(() => {
-    fetchPlayerInfo(address);
-  }, [address]);
+    if (!account) return;
+    fetchCreditInfor(account.address);
+  }, [account]);
 
-  const fetchPlayerInfo = async (address: string) => {
-    const player = await fetchPlayer(address);
+  const fetchCreditInfor = async (address: string) => {
     const credit = await fetchCredit(address);
-
-    if (player) {
-      setPlayerInfo(player);
-      console.log("player", player);
-    }
 
     if (credit) {
       setCreditInfor(credit);
@@ -66,8 +48,9 @@ const HomeMobile = () => {
   };
 
   const handleClaimCredit = async () => {
+    if (!account) return;
     await claimCredit();
-    const credit = await fetchCredit(address);
+    const credit = await fetchCredit(account.address);
 
     if (credit) {
       setCreditInfor(credit);
@@ -76,10 +59,14 @@ const HomeMobile = () => {
   };
 
   useEffect(() => {
-    const test = new Date(Number(playerInfo.last_claim_time) / 1000 + 86400000);
+    if (!auth) return;
+
+    const test = new Date(
+      Number(auth.player.last_claim_time) / 1000 + 86400000,
+    );
 
     setExpiryTimestamp(test);
-  }, [playerInfo]);
+  }, [auth]);
 
   return (
     <div className="mx-auto flex h-full w-full max-w-screen-sm flex-col items-center px-8">
@@ -91,20 +78,20 @@ const HomeMobile = () => {
               maps.find((map) => {
                 return (
                   map.id ===
-                  (playerInfo.game_finished || playerInfo.current_round == 0
-                    ? playerInfo.current_round + 1
-                    : playerInfo.current_round)
+                  (auth?.player.game_finished || auth?.player.current_round == 0
+                    ? auth?.player.current_round + 1
+                    : auth?.player.current_round)
                 );
               })?.image
             }
-            className="absolute left-0 top-0 z-0 h-full w-full object-cover brightness-75"
+            className="absolute left-0 top-0 z-0 h-full w-full object-cover brightness-75 shadow-inner"
           />
           <div className="relative z-10 flex h-full w-full flex-col justify-between">
             <div className="w-full text-2xl">
-              Map: 0
-              {playerInfo.game_finished || playerInfo.current_round == 0
-                ? playerInfo.current_round + 1
-                : playerInfo.current_round}
+              Current Map: 0
+              {auth?.player.game_finished || auth?.player.current_round == 0
+                ? auth?.player.current_round + 1
+                : auth?.player.current_round}
             </div>
             <div className="flex w-full justify-end">
               <Link

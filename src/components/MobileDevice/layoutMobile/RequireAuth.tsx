@@ -1,14 +1,19 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { PlayerInfo } from "../../../type/type";
-import { Aptos, AptosConfig, InputViewFunctionData, Network} from "@aptos-labs/ts-sdk";
+import {
+  Aptos,
+  AptosConfig,
+  InputViewFunctionData,
+  Network,
+} from "@aptos-labs/ts-sdk";
 import { MODULE_ADDRESS } from "../../../utils/Var";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 
 const RequireAuth = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { connected, isLoading } = useWallet();
+  const { connected, isLoading, account } = useWallet();
   const [progress, setProgress] = useState(0);
   const [checkUpdate, setCheckUpdate] = useState(true);
 
@@ -23,11 +28,10 @@ const RequireAuth = () => {
   }, [isLoading]);
 
   useEffect(() => {
-    if(connected){
-      const address = localStorage.getItem("address") ?? "";
-      UpdateAccount(address);
+    if (connected) {
+      UpdateAccount(account?.address);
     }
-  }, [connected]);
+  }, [connected, account]);
 
   const UpdateAccount = async (address: string | undefined) => {
     if (address) {
@@ -39,9 +43,8 @@ const RequireAuth = () => {
           functionArguments: [address],
         };
         const response = await aptos.view({ payload });
-        // @ts-ignore
 
-        const info: PlayerInfo = response[0];
+        const info = response[0];
         console.log(info);
 
         setCheckUpdate(true);
@@ -54,18 +57,24 @@ const RequireAuth = () => {
   };
 
   const ProgressBar = () => (
-    <div className="w-[350px] border-2 border-dark-300">
+    <div className="border-dark-300 w-[350px] border-2">
       <div className="m-1">
-        <div style={{border: "1px solid black", width: `${progress}%`, height: "30px", backgroundColor: "white"}}></div>
+        <div
+          style={{
+            border: "1px solid black",
+            width: `${progress}%`,
+            height: "30px",
+            backgroundColor: "white",
+          }}
+        ></div>
       </div>
     </div>
-
   );
 
   if (isLoading) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen">
-        <div className="text-xl text-white m-2">Loading...</div>
+      <div className="flex h-screen flex-col items-center justify-center">
+        <div className="m-2 text-xl text-white">Loading...</div>
         <ProgressBar />
       </div>
     );
