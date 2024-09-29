@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { PlayerInfo } from "../../../type/type";
 import {
@@ -9,6 +9,7 @@ import {
 } from "@aptos-labs/ts-sdk";
 import { MODULE_ADDRESS } from "../../../utils/Var";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import AuthContext from "../../../contexts/AuthProvider";
 
 const RequireAuth = () => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const RequireAuth = () => {
   const { connected, isLoading, account } = useWallet();
   const [progress, setProgress] = useState(0);
   const [checkUpdate, setCheckUpdate] = useState(true);
+  const auth = useContext(AuthContext);
 
   useEffect(() => {
     if (isLoading) {
@@ -36,18 +38,9 @@ const RequireAuth = () => {
   const UpdateAccount = async (address: string | undefined) => {
     if (address) {
       try {
-        const aptosConfig = new AptosConfig({ network: Network.TESTNET });
-        const aptos = new Aptos(aptosConfig);
-        const payload: InputViewFunctionData = {
-          function: `${MODULE_ADDRESS}::gamev1::get_player_info`,
-          functionArguments: [address],
-        };
-        const response = await aptos.view({ payload });
+        if (!auth) return;
 
-        const info = response[0];
-        console.log(info);
-
-        setCheckUpdate(true);
+        auth.fetchPlayerInfo(address);
       } catch (error) {
         console.log(error);
         navigate("/create-account");

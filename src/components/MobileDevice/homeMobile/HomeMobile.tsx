@@ -29,7 +29,8 @@ const HomeMobile = () => {
   const { fetchCredit, claimCredit } = useCredit();
   const auth = useContext(AuthContext);
   const { connected, account } = useWallet();
-
+  const [currentMap, setCurrentMap] = useState(1);
+  const [selectedMap, setSelectedMap] = useState(1);
   const [CreditInfor, setCreditInfor] = useState<number>(0);
   const [expiryTimestamp, setExpiryTimestamp] = useState(new Date());
 
@@ -56,6 +57,8 @@ const HomeMobile = () => {
       setCreditInfor(credit);
       console.log("credit", credit);
     }
+
+    await auth?.fetchPlayerInfo(account.address);
   };
 
   useEffect(() => {
@@ -66,7 +69,28 @@ const HomeMobile = () => {
     );
 
     setExpiryTimestamp(test);
-  }, [auth]);
+
+    const crtMap =
+      maps.find((map) => {
+        return (
+          map.id ===
+          (auth?.player.game_finished || auth?.player.current_round == 0
+            ? auth?.player.current_round + 1
+            : auth?.player.current_round)
+        );
+      })?.id || 1;
+
+    setCurrentMap(crtMap);
+    setSelectedMap(crtMap);
+  }, [auth, auth?.player]);
+
+  const handleChangeLevel = (isNext: boolean) => {
+    if (isNext) {
+      setSelectedMap((prev) => prev + 1);
+    } else {
+      setSelectedMap((prev) => prev - 1);
+    }
+  };
 
   return (
     <div className="mx-auto flex h-full w-full max-w-screen-sm flex-col items-center px-8">
@@ -76,15 +100,10 @@ const HomeMobile = () => {
           <img
             src={
               maps.find((map) => {
-                return (
-                  map.id ===
-                  (auth?.player.game_finished || auth?.player.current_round == 0
-                    ? auth?.player.current_round + 1
-                    : auth?.player.current_round)
-                );
+                return map.id === selectedMap;
               })?.image
             }
-            className="absolute left-0 top-0 z-0 h-full w-full object-cover brightness-75 shadow-inner"
+            className="absolute left-0 top-0 z-0 h-full w-full object-cover shadow-inner brightness-75"
           />
           <div className="relative z-10 flex h-full w-full flex-col justify-between">
             <div className="w-full text-2xl">
@@ -93,13 +112,31 @@ const HomeMobile = () => {
                 ? auth?.player.current_round + 1
                 : auth?.player.current_round}
             </div>
-            <div className="flex w-full justify-end">
-              <Link
-                to="/playGame"
-                className="border-2 border-white px-10 py-2 text-2xl hover:bg-white"
+            <div className="flex w-full items-center justify-between text-2xl">
+              <button
+                onClick={() => {
+                  if (selectedMap <= maps.length) handleChangeLevel(false);
+                }}
               >
-                Play
-              </Link>
+                Back
+              </button>
+              <button
+                onClick={() => {
+                  if (selectedMap >= 1) handleChangeLevel(true);
+                }}
+              >
+                Next
+              </button>
+            </div>
+            <div className="flex w-full justify-end">
+              <button disabled={currentMap !== selectedMap}>
+                <Link
+                  to="/playGame"
+                  className="border-2 border-white px-10 py-2 text-2xl hover:bg-white"
+                >
+                  Play
+                </Link>
+              </button>
             </div>
           </div>
         </div>

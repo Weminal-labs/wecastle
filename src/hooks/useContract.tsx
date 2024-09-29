@@ -10,7 +10,6 @@ import { useState } from "react";
 import { MODULE_ADDRESS } from "../utils/Var";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { fromB64, toB64 } from "../utils/HelperFunctions";
-// import { Deserializer } from "@aptos-labs/ts-sdk";
 import axios from "axios";
 
 interface useContractProps {
@@ -44,7 +43,6 @@ const useContract = () => {
     try {
       setLoading(true);
       setError(null);
-      console.log("launch txn");
 
       //create txn
       const txn = await aptos.transaction.build.simple({
@@ -69,8 +67,6 @@ const useContract = () => {
           },
         )
       ).data.data;
-
-      console.log(sponsorSignedTransactionBytesBase64, sponsorAuthBytesBase64);
 
       const deserializer = new Deserializer(fromB64(sponsorAuthBytesBase64));
       const feePayerAuthenticator =

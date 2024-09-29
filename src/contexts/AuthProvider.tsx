@@ -10,6 +10,7 @@ interface AuthProviderProps {
 export interface AuthContextType {
   player: PlayerInfo;
   setPlayer: React.Dispatch<React.SetStateAction<PlayerInfo>>;
+  fetchPlayerInfo: (address: string) => Promise<boolean>;
 }
 const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -37,16 +38,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (player) {
       setPlayer(player);
       console.log("player", player);
+      return true;
     }
+
+    return false;
   };
 
   useEffect(() => {
     if (!account) return;
     fetchPlayerInfo(account.address);
+
+    console.log(account);
   }, [account]);
 
   return (
-    <AuthContext.Provider value={{ player, setPlayer }}>
+    <AuthContext.Provider value={{ player, setPlayer, fetchPlayerInfo }}>
       {children}
     </AuthContext.Provider>
   );
