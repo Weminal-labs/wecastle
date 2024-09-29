@@ -11,8 +11,6 @@ export const LoginPage = () => {
 
   useEffect(() => {
     if (connected) {
-      localStorage.setItem("address", account?.address ?? "");
-
       navigate("/");
     }
   }, [connected]);

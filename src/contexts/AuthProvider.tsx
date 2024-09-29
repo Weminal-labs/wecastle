@@ -1,33 +1,58 @@
-import { createContext, ReactNode, useState } from "react";
-import { User } from "../type/type";
-import { useAptimusFlow } from "aptimus-sdk-test/react";
-import { jwtDecode } from "jwt-decode";
+import { createContext, ReactNode, useEffect, useState } from "react";
+import { PlayerInfo } from "../type/type";
+import useGetPlayer from "../hooks/useGetPlayer";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
 
 // Define an interface for the AuthProvider props
 interface AuthProviderProps {
   children: ReactNode;
 }
 export interface AuthContextType {
-  auth: User | null;
-  setAuth: React.Dispatch<React.SetStateAction<User | null>>;
-  getAuth: () => Promise<void>
+  player: PlayerInfo;
+  setPlayer: React.Dispatch<React.SetStateAction<PlayerInfo>>;
+  fetchPlayerInfo: (address: string) => Promise<boolean>;
 }
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const flow = useAptimusFlow();
+  const { fetchPlayer } = useGetPlayer();
+  const { account } = useWallet();
+  const [player, setPlayer] = useState<PlayerInfo>({
+    address_id: "",
+    current_round: 0,
+    game_finished: true,
+    hero_owned: "",
+    name: "",
+    last_claim_time: "",
+    round1_finish_time: "",
+    round1_play_time: "",
+    round2_finish_time: "",
+    round2_play_time: "",
+    round3_finish_time: "",
+    round3_play_time: "",
+  });
 
-  const [auth, setAuth] = useState<User | null>(null);
-  const getAuth = async () => {
-    const session = await flow.getSession();
-    if (session && session.jwt) {
-      const user: User = jwtDecode(session.jwt);
-      setAuth(user);
+  const fetchPlayerInfo = async (address: string) => {
+    const player = await fetchPlayer(address);
+
+    if (player) {
+      setPlayer(player);
+      console.log("player", player);
+      return true;
     }
+
+    return false;
   };
 
+  useEffect(() => {
+    if (!account) return;
+    fetchPlayerInfo(account.address);
+
+    console.log(account);
+  }, [account]);
+
   return (
-    <AuthContext.Provider value={{ auth, setAuth ,getAuth}}>
+    <AuthContext.Provider value={{ player, setPlayer, fetchPlayerInfo }}>
       {children}
     </AuthContext.Provider>
   );
