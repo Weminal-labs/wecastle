@@ -22,6 +22,8 @@ const LayoutContainer = styled.div`
 const MainContentWrapper = styled.div`
   grid-column: span 12;
   grid-row: span 12;
+  max-height: 100%;
+  overflow-y: scroll;
 `;
 
 const SideBarWrapper = styled.div`
@@ -38,7 +40,7 @@ const Layout = () => {
   const hideSidebarRoutes = ["/marketplace", "/playGame"];
 
   return (
-    <LayoutContainer>
+    <LayoutContainer className="max-w-screen-sm">
       <HeaderWrapper>
         <MobileHeader />
       </HeaderWrapper>

@@ -3,10 +3,7 @@ import React, { useEffect } from "react";
 import { Outlet, redirect } from "react-router-dom";
 
 const AuthLayout = () => {
-  // const address = localStorage.getItem("address");
-  const { wallet, connected } = useWallet();
-
-
+  const { connected } = useWallet();
 
   useEffect(() => {
     if (connected) {

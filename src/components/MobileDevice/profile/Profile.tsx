@@ -1,38 +1,8 @@
-import useGetPlayer from "../../../hooks/useGetPlayer";
-import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
-import { useEffect, useState } from "react";
-import { PlayerInfo } from "../../../type/type";
+import { useContext } from "react";
+import AuthContext from "../../../contexts/AuthProvider";
 
 const Profile = () => {
-  const address = localStorage.getItem("address") ?? "";
-  const { fetchPlayer } = useGetPlayer();
-  const [playerInfo, setPlayerInfo] = useState<PlayerInfo>({
-    address_id: "",
-    current_round: 0,
-    game_finished: true,
-    hero_owned: "",
-    name: "",
-    last_claim_time: "",
-    round1_finish_time: "",
-    round1_play_time: "",
-    round2_finish_time: "",
-    round2_play_time: "",
-    round3_finish_time: "",
-    round3_play_time: "",
-  });
-
-  useEffect(() => {
-    fetchPlayerInfo(address);
-  }, [address]);
-
-  const fetchPlayerInfo = async (address: string) => {
-    const player = await fetchPlayer(address);
-
-    if (player) {
-      setPlayerInfo(player);
-      console.log("player", player);
-    }
-  };
+  const auth = useContext(AuthContext);
 
   return (
     <div className="mx-auto flex h-full w-full max-w-screen-sm flex-col items-center justify-center px-4">
@@ -47,13 +17,13 @@ const Profile = () => {
           </div>
           <div className="col-span-2 flex flex-col items-center gap-1">
             <div className="w-full border-2 border-black bg-[#C48D5D] p-2 text-lg text-white">
-              <div className="my-[-5px]">Name: {playerInfo.name}</div>
-              <div>Username: {playerInfo.name}</div>
+              <div className="my-[-5px]">Name: {auth?.player.name}</div>
+              <div>Username: {auth?.player.name}</div>
             </div>
             <div className="w-full border-2 border-black bg-[#C48D5D] p-2 text-lg text-white">
-              <div className="my-[-5px]">Map: {playerInfo.name}</div>
-              <div className="mb-[-5px]">Chest: {playerInfo.name}</div>
-              <div>Gold: {playerInfo.name}</div>
+              <div className="my-[-5px]">Map: {auth?.player.name}</div>
+              <div className="mb-[-5px]">Chest: {auth?.player.name}</div>
+              <div>Gold: {auth?.player.name}</div>
             </div>
           </div>
         </div>

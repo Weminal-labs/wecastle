@@ -3,11 +3,11 @@ import PixelCustom from "../../buttons/PixelCustom";
 import { FaRegClock } from "react-icons/fa";
 import { FaKey } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import useGetPlayer from "../../../hooks/useGetPlayer";
+import { useEffect, useState, useContext } from "react";
 import useCredit from "../../../hooks/useCredit";
-import { PlayerInfo } from "../../../type/type";
 import Timer from "../../timer/Timer";
+import AuthContext from "../../../contexts/AuthProvider";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
 
 const maps = [
   {
@@ -26,38 +26,21 @@ const maps = [
 
 const HomeMobile = () => {
   const navigate = useNavigate();
-  const address = localStorage.getItem("address") ?? "";
-  const { fetchPlayer } = useGetPlayer();
   const { fetchCredit, claimCredit } = useCredit();
-  const [playerInfo, setPlayerInfo] = useState<PlayerInfo>({
-    address_id: "",
-    current_round: 0,
-    game_finished: true,
-    hero_owned: "",
-    name: "",
-    last_claim_time: "",
-    round1_finish_time: "",
-    round1_play_time: "",
-    round2_finish_time: "",
-    round2_play_time: "",
-    round3_finish_time: "",
-    round3_play_time: "",
-  });
+  const auth = useContext(AuthContext);
+  const { connected, account } = useWallet();
+  const [currentMap, setCurrentMap] = useState(1);
+  const [selectedMap, setSelectedMap] = useState(1);
   const [CreditInfor, setCreditInfor] = useState<number>(0);
   const [expiryTimestamp, setExpiryTimestamp] = useState(new Date());
 
   useEffect(() => {
-    fetchPlayerInfo(address);
-  }, [address]);
+    if (!account) return;
+    fetchCreditInfor(account.address);
+  }, [account]);
 
-  const fetchPlayerInfo = async (address: string) => {
-    const player = await fetchPlayer(address);
+  const fetchCreditInfor = async (address: string) => {
     const credit = await fetchCredit(address);
-
-    if (player) {
-      setPlayerInfo(player);
-      console.log("player", player);
-    }
 
     if (credit) {
       setCreditInfor(credit);
@@ -66,20 +49,48 @@ const HomeMobile = () => {
   };
 
   const handleClaimCredit = async () => {
+    if (!account) return;
     await claimCredit();
-    const credit = await fetchCredit(address);
+    const credit = await fetchCredit(account.address);
 
     if (credit) {
       setCreditInfor(credit);
       console.log("credit", credit);
     }
+
+    await auth?.fetchPlayerInfo(account.address);
   };
 
   useEffect(() => {
-    const test = new Date(Number(playerInfo.last_claim_time) / 1000 + 86400000);
+    if (!auth) return;
+
+    const test = new Date(
+      Number(auth.player.last_claim_time) / 1000 + 86400000,
+    );
 
     setExpiryTimestamp(test);
-  }, [playerInfo]);
+
+    const crtMap =
+      maps.find((map) => {
+        return (
+          map.id ===
+          (auth?.player.game_finished || auth?.player.current_round == 0
+            ? auth?.player.current_round + 1
+            : auth?.player.current_round)
+        );
+      })?.id || 1;
+
+    setCurrentMap(crtMap);
+    setSelectedMap(crtMap);
+  }, [auth, auth?.player]);
+
+  const handleChangeLevel = (isNext: boolean) => {
+    if (isNext) {
+      setSelectedMap((prev) => prev + 1);
+    } else {
+      setSelectedMap((prev) => prev - 1);
+    }
+  };
 
   return (
     <div className="mx-auto flex h-full w-full max-w-screen-sm flex-col items-center px-8">
@@ -89,30 +100,43 @@ const HomeMobile = () => {
           <img
             src={
               maps.find((map) => {
-                return (
-                  map.id ===
-                  (playerInfo.game_finished || playerInfo.current_round == 0
-                    ? playerInfo.current_round + 1
-                    : playerInfo.current_round)
-                );
+                return map.id === selectedMap;
               })?.image
             }
-            className="absolute left-0 top-0 z-0 h-full w-full object-cover brightness-75"
+            className="absolute left-0 top-0 z-0 h-full w-full object-cover shadow-inner brightness-75"
           />
           <div className="relative z-10 flex h-full w-full flex-col justify-between">
             <div className="w-full text-2xl">
-              Map: 0
-              {playerInfo.game_finished || playerInfo.current_round == 0
-                ? playerInfo.current_round + 1
-                : playerInfo.current_round}
+              Current Map: 0
+              {auth?.player.game_finished || auth?.player.current_round == 0
+                ? auth?.player.current_round + 1
+                : auth?.player.current_round}
+            </div>
+            <div className="flex w-full items-center justify-between text-2xl">
+              <button
+                onClick={() => {
+                  if (selectedMap <= maps.length) handleChangeLevel(false);
+                }}
+              >
+                Back
+              </button>
+              <button
+                onClick={() => {
+                  if (selectedMap >= 1) handleChangeLevel(true);
+                }}
+              >
+                Next
+              </button>
             </div>
             <div className="flex w-full justify-end">
-              <Link
-                to="/playGame"
-                className="border-2 border-white px-10 py-2 text-2xl hover:bg-white"
-              >
-                Play
-              </Link>
+              <button disabled={currentMap !== selectedMap}>
+                <Link
+                  to="/playGame"
+                  className="border-2 border-white px-10 py-2 text-2xl hover:bg-white"
+                >
+                  Play
+                </Link>
+              </button>
             </div>
           </div>
         </div>

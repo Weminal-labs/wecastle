@@ -10,13 +10,15 @@ import { useState } from "react";
 import { MODULE_ADDRESS } from "../utils/Var";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { fromB64, toB64 } from "../utils/HelperFunctions";
-// import { Deserializer } from "@aptos-labs/ts-sdk";
 import axios from "axios";
 
 interface useContractProps {
   functionName: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   functionArgs: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onSuccess?: (result: any) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onError?: (error: any) => void;
   onFinally?: () => void;
 }
@@ -25,13 +27,7 @@ const useContract = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<null | string>(null);
   // const flow = useAptimusFlow();
-  const {
-    signAndSubmitTransaction,
-    disconnect,
-    wallet,
-    connected,
-    signTransaction,
-  } = useWallet();
+  const { disconnect, account, signTransaction } = useWallet();
   const callContract = async ({
     functionName,
     functionArgs,
@@ -41,16 +37,16 @@ const useContract = () => {
   }: useContractProps) => {
     const aptosConfig = new AptosConfig({ network: Network.TESTNET });
     const aptos = new Aptos(aptosConfig);
-    const address = localStorage.getItem("address");
+
+    if (!account) return;
 
     try {
       setLoading(true);
       setError(null);
-      console.log("launch txn");
 
       //create txn
       const txn = await aptos.transaction.build.simple({
-        sender: address ?? "",
+        sender: account.address,
         data: {
           function: `${MODULE_ADDRESS}::gamev1::${functionName}`,
           functionArguments: functionArgs,
@@ -58,7 +54,7 @@ const useContract = () => {
         withFeePayer: true,
       });
 
-      console.log(toB64(txn.bcsToBytes()), address);
+      console.log(toB64(txn.bcsToBytes()), account.address);
       const txbBase64 = toB64(txn.bcsToBytes());
 
       const { sponsorAuthBytesBase64, sponsorSignedTransactionBytesBase64 } = (
@@ -67,12 +63,10 @@ const useContract = () => {
           {
             network: "testnet",
             transactionBytesBase64: txbBase64,
-            sender: address,
+            sender: account.address,
           },
         )
       ).data.data;
-
-      console.log(sponsorSignedTransactionBytesBase64, sponsorAuthBytesBase64);
 
       const deserializer = new Deserializer(fromB64(sponsorAuthBytesBase64));
       const feePayerAuthenticator =
@@ -102,11 +96,11 @@ const useContract = () => {
       if (onSuccess) {
         onSuccess(executedTransaction);
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.log(error);
       if (error.status === 400) {
         disconnect;
-        localStorage.clear();
         window.location.reload();
       }
       setError(error.toString());
