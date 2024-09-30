@@ -4,7 +4,7 @@ import PixelCustom from "../buttons/PixelCustom";
 
 const items = [
   { text: "Home", to: "/" },
-  { text: "Docs", to: "/docs" },
+  { text: "Board", to: "/leaderboard" },
   { text: "Profile", to: "/profile" },
 ];
 

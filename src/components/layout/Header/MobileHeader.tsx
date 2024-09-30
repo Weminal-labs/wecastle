@@ -1,7 +1,7 @@
 import { ContentCopy } from "@mui/icons-material";
 import { shortenAddress } from "../../../utils/Shorten";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Button, Tooltip } from "@mui/material";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { IoIosArrowBack } from "react-icons/io";
@@ -16,6 +16,7 @@ const MobileHeader = () => {
   const navigate = useNavigate();
   const { connected, account } = useWallet();
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!connected) {
@@ -30,6 +31,27 @@ const MobileHeader = () => {
       }, 1000);
     }
   }, [openToolTip]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropDownOpen(false);
+      }
+    };
+
+    if (isDropDownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isDropDownOpen]);
 
   return (
     <header className="flex w-full flex-row items-center justify-between px-4 py-4">
@@ -66,7 +88,7 @@ const MobileHeader = () => {
           </Tooltip>
         </h2>
       </div>
-      <div className="relative">
+      <div className="relative" ref={dropdownRef}>
         <div
           onClick={() => {
             setIsDropDownOpen(!isDropDownOpen);
