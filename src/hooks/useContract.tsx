@@ -1,8 +1,10 @@
 import {
+  Account,
   AccountAuthenticator,
   Aptos,
   AptosConfig,
   Deserializer,
+  Ed25519PrivateKey,
   Network,
   SimpleTransaction,
 } from "@aptos-labs/ts-sdk";
@@ -22,6 +24,8 @@ interface useContractProps {
   onError?: (error: any) => void;
   onFinally?: () => void;
 }
+
+const ADMIN_PRIVATE_KEY = import.meta.env.VITE_SECRET_ADMIN_KEY;
 
 const useContract = () => {
   const [loading, setLoading] = useState(false);
@@ -115,7 +119,70 @@ const useContract = () => {
     }
   };
 
-  return { callContract, loading, error };
+  const callAdminContract = async ({
+    functionName,
+    functionArgs,
+    onSuccess,
+    onError,
+    onFinally,
+  }: useContractProps) => {
+    const aptosConfig = new AptosConfig({ network: Network.TESTNET });
+    const aptos = new Aptos(aptosConfig);
+
+    const privateKey = new Ed25519PrivateKey(ADMIN_PRIVATE_KEY);
+
+    const adminAccount = await Account.fromPrivateKey({ privateKey });
+
+    if (!adminAccount) return;
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      //create txn
+      const txn = await aptos.transaction.build.simple({
+        sender: adminAccount.accountAddress.toString(),
+        data: {
+          function: `${MODULE_ADDRESS}::gamev1::${functionName}`,
+          functionArguments: functionArgs,
+        },
+        withFeePayer: true,
+      });
+
+      const pendingTransaction = await aptos.signAndSubmitTransaction({
+        signer: adminAccount,
+        transaction: txn,
+      });
+
+      const executedTransaction = await aptos.waitForTransaction({
+        transactionHash: pendingTransaction.hash,
+      });
+
+      console.log("Executed Transaction:", executedTransaction);
+
+      if (onSuccess) {
+        onSuccess(executedTransaction);
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.log(error);
+      if (error.status === 400) {
+        disconnect;
+        window.location.reload();
+      }
+      setError(error.toString());
+      if (onError) {
+        onError(error);
+      }
+    } finally {
+      setLoading(false);
+      if (onFinally) {
+        onFinally();
+      }
+    }
+  };
+
+  return { callContract, callAdminContract, loading, error };
 };
 
 export default useContract;

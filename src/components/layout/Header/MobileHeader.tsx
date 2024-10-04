@@ -1,21 +1,25 @@
 import { ContentCopy } from "@mui/icons-material";
 import { shortenAddress } from "../../../utils/Shorten";
-import MenuIcon from "@mui/icons-material/Menu";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button, Tooltip } from "@mui/material";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import { IoIosArrowBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-import { LiaTimesSolid } from "react-icons/lia";
-import PixelCustom from "../../buttons/PixelCustom";
-import clsx from "clsx";
+import AuthContext from "../../../contexts/AuthProvider";
+import { BiSolidCoinStack } from "react-icons/bi";
+import { RiKey2Fill } from "react-icons/ri";
+import { FaRankingStar } from "react-icons/fa6";
+import { HiUserGroup } from "react-icons/hi";
+import PlayerInfoModal from "./PlayerInforModal";
+import { IoIosArrowBack } from "react-icons/io";
+import LeaderboardModal from "../../LeaderboarbModal/LeaderboardModal";
 
 const MobileHeader = () => {
   const [openToolTip, setOpenToolTip] = useState(false);
-  const { disconnect } = useWallet();
+  const [openPlayerModal, setPlayerModal] = useState(false);
+  const [openLeaderboardModal, setLeaderboardModal] = useState(false);
   const navigate = useNavigate();
   const { connected, account } = useWallet();
-  const [isDropDownOpen, setIsDropDownOpen] = useState(false);
+  const auth = useContext(AuthContext);
 
   useEffect(() => {
     if (!connected) {
@@ -31,18 +35,44 @@ const MobileHeader = () => {
     }
   }, [openToolTip]);
 
+  const handlePlayerInfoClose = () => {
+    setPlayerModal(false);
+  };
+
+  const handleLeaderboardClose = () => {
+    setLeaderboardModal(false);
+  };
+
   return (
-    <header className="flex w-full flex-row items-center justify-between px-4 py-4">
-      <div
-        className="cursor-pointer text-3xl text-white"
-        onClick={() => {
-          navigate(-1);
-        }}
-      >
-        <IoIosArrowBack />
+    <header className="flex w-full flex-row items-start justify-between px-4 py-4">
+      <PlayerInfoModal
+        open={openPlayerModal}
+        handleClose={handlePlayerInfoClose}
+        playerInfo={auth?.player}
+      />
+      <LeaderboardModal
+        open={openLeaderboardModal}
+        handleClose={handleLeaderboardClose}
+      />
+
+      <div className="flex flex-grow flex-col justify-start space-y-4">
+        <div
+          className="cursor-pointer text-3xl text-white"
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
+          <IoIosArrowBack />
+        </div>
+        <div className="flex w-fit items-center space-x-2 rounded-full bg-[#DDDDDD] px-4 py-1">
+          <RiKey2Fill /> <p>{auth?.CreditInfor}</p>
+        </div>
+        {/* <div className="flex w-fit items-center space-x-2 rounded-full bg-[#DDDDDD] px-4 py-1">
+          <BiSolidCoinStack /> <p>1M</p>
+        </div> */}
       </div>
-      <div className="flex flex-1 justify-center">
-        <h2 className="font-vt323 flex items-center text-6xl text-white">
+      <div className="flex flex-1 flex-grow-[4] items-start justify-center">
+        <h2 className="font-vt323 flex items-center rounded-full bg-[#DDDDDD]/20 px-5 py-1 text-white">
           <Tooltip
             open={openToolTip}
             onOpen={() => {
@@ -57,7 +87,7 @@ const MobileHeader = () => {
                   if (!account) return;
                   navigator.clipboard.writeText(account?.address);
                 }}
-                className="cursor-pointer"
+                className="cursor-pointer !text-base"
               />
               <span className="text-lg">
                 {account && shortenAddress(account.address, 5)}
@@ -66,39 +96,25 @@ const MobileHeader = () => {
           </Tooltip>
         </h2>
       </div>
-      <div className="relative">
-        <div
+      <div className="relative flex flex-grow flex-col items-end space-y-4 ps-4 text-3xl text-white">
+        <button
+          className="size-10 rounded-full"
           onClick={() => {
-            setIsDropDownOpen(!isDropDownOpen);
+            setPlayerModal(true);
           }}
-          className="cursor-pointer"
         >
-          {isDropDownOpen ? (
-            <LiaTimesSolid className="!text-4xl text-white" />
-          ) : (
-            <MenuIcon className="!text-4xl text-white" />
-          )}
-        </div>
-
-        <div
-          className={clsx(
-            "absolute right-0 top-full translate-y-2",
-            isDropDownOpen ? "absolute" : "hidden",
-          )}
+          <img src="/gf.jpg" alt="" className="rounded-full" />
+        </button>
+        {/* <button>
+          <HiUserGroup />
+        </button> */}
+        <button
+          onClick={() => {
+            setLeaderboardModal(true);
+          }}
         >
-          <PixelCustom>
-            <div className="flex flex-col space-y-4 bg-[#C48D5D] px-6 py-4">
-              <PixelCustom>
-                <button
-                  className="flex whitespace-nowrap bg-white px-6 py-1"
-                  onClick={disconnect}
-                >
-                  Log Out
-                </button>
-              </PixelCustom>
-            </div>
-          </PixelCustom>
-        </div>
+          <FaRankingStar />
+        </button>
       </div>
     </header>
   );

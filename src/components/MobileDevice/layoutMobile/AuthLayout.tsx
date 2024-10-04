@@ -11,7 +11,7 @@ const AuthLayout = () => {
     }
   }, [connected]);
   return (
-    <div className="flex h-[100vh] items-center justify-center">
+    <div id="login" className="flex h-[100vh] items-center justify-center">
       <Outlet />
     </div>
   );

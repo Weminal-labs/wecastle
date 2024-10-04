@@ -49,6 +49,9 @@ body, html {
 #root {
   height: 100%;
   width: 100%;
+}
+
+#login{
   background-color: black;
   background: 
   radial-gradient(

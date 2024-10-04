@@ -9,14 +9,15 @@ const LayoutContainer = styled.div`
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: repeat(12, 1fr);
   height: 100svh;
+  background-color: black;
   background: radial-gradient(
       72.4% 40.52% at 50% 50%,
       rgba(255, 255, 255, 0) 0%,
       rgba(0, 0, 0, 0.6) 100%
-    )
-  background-size: cover; /* Adjust as needed */
-  background-position: center; /* Adjust as needed */
-  background-repeat: no-repeat;
+    ),
+    url("/background-no-castle.png");
+  background-size: cover; /* This will make the background cover the entire area */
+  background-position: center; /* This centers the background image */
 `;
 
 const MainContentWrapper = styled.div`

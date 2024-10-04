@@ -30,3 +30,9 @@ export type PlayerInfo = {
   round3_finish_time: string;
   round3_play_time: string;
 };
+
+export type LeaderBoardInfo = {
+  address_id: string;
+  name: string;
+  point: number;
+};

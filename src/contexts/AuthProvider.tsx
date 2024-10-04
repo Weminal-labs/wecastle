@@ -2,6 +2,7 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 import { PlayerInfo } from "../type/type";
 import useGetPlayer from "../hooks/useGetPlayer";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import useCredit from "../hooks/useCredit";
 
 // Define an interface for the AuthProvider props
 interface AuthProviderProps {
@@ -11,12 +12,16 @@ export interface AuthContextType {
   player: PlayerInfo;
   setPlayer: React.Dispatch<React.SetStateAction<PlayerInfo>>;
   fetchPlayerInfo: (address: string) => Promise<boolean>;
+  fetchCreditInfor: (address: string) => Promise<void>;
+  CreditInfor: number;
 }
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const { fetchPlayer } = useGetPlayer();
+  const { fetchCredit } = useCredit();
   const { account } = useWallet();
+  const [CreditInfor, setCreditInfor] = useState<number>(0);
   const [player, setPlayer] = useState<PlayerInfo>({
     address_id: "",
     current_round: 0,
@@ -37,22 +42,35 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     if (player) {
       setPlayer(player);
-      console.log("player", player);
       return true;
     }
 
     return false;
   };
 
+  const fetchCreditInfor = async (address: string) => {
+    const credit = await fetchCredit(address);
+
+    if (credit) {
+      setCreditInfor(credit);
+    }
+  };
+
   useEffect(() => {
     if (!account) return;
     fetchPlayerInfo(account.address);
-
-    console.log(account);
   }, [account]);
 
   return (
-    <AuthContext.Provider value={{ player, setPlayer, fetchPlayerInfo }}>
+    <AuthContext.Provider
+      value={{
+        player,
+        setPlayer,
+        fetchPlayerInfo,
+        fetchCreditInfor,
+        CreditInfor,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

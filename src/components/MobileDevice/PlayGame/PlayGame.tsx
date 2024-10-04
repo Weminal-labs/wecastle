@@ -15,7 +15,9 @@ const PlayGame: React.FC = () => {
 
     if (isLoaded) {
       setLoadGame(false);
-      playRound(auth.player.current_round);
+      playRound(
+        auth.player.current_round !== 0 ? auth.player.current_round : 1,
+      );
     }
   }, [isLoaded, auth]);
 
