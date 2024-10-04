@@ -41,6 +41,7 @@ const RequireAuth = () => {
         if (!auth) return;
 
         auth.fetchPlayerInfo(address);
+        auth.fetchCreditInfor(address);
       } catch (error) {
         console.log(error);
         navigate("/create-account");
