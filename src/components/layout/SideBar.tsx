@@ -22,21 +22,21 @@ const SideBar = () => {
       <div className="absolute bottom-0 z-0 w-full">
         <div
           className={clsx(
-            "absolute bottom-0 left-0 h-[69px] !w-[35vw] bg-[#DDDDDD] duration-500",
+            "absolute bottom-0 left-0 !h-[69px] !w-[35vw] bg-[#DDDDDD] duration-500",
             selected === items[0].to ? "-translate-x-full" : "-translate-x-0",
           )}
         ></div>
         <img
           src="/subtract.svg"
           className={clsx(
-            "absolute bottom-0 z-0 w-[100vw] transition-transform duration-500",
+            "absolute bottom-0 z-0 w-[100vw] !h-[69px] transition-transform duration-500 object-cover",
             selected === items[0].to && "-translate-x-1/3",
             selected === items[2].to && "translate-x-1/3",
           )}
         />
         <div
           className={clsx(
-            "absolute bottom-0 right-0 h-[69px] !w-[35vw] bg-[#DDDDDD] duration-500",
+            "absolute bottom-0 right-0 !h-[69px] !w-[35vw] bg-[#DDDDDD] duration-500",
             selected === items[2].to ? "translate-x-full" : "translate-x-0",
           )}
         ></div>

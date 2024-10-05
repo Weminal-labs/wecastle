@@ -33,15 +33,16 @@ export const UnityGameProvider: React.FC<GameProviderProps> = ({
 
   const handlePushRewardGame = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async (jsonData: any) => {
-      console.log("call")
-      const point = JSON.parse(jsonData);
+    (number: any) => {
+      const p = JSON.parse(number);
       if (!auth) return;
 
       const round =
         auth.player.current_round !== 0 ? auth.player.current_round : 1;
 
-      await endGame(round, point, auth.player.address_id);
+      console.log("end game");
+
+      // endGame(round, p, auth.player.address_id);
     },
     [auth, endGame],
   );
@@ -49,12 +50,10 @@ export const UnityGameProvider: React.FC<GameProviderProps> = ({
   useEffect(() => {
     // Add the event listener
     addEventListener("PushRewardForPlayer", handlePushRewardGame);
-    // addEventListener("FinishGame", handleUnityApplicationFinish);
 
     // Clean up the event listener on unmount
     return () => {
       removeEventListener("PushRewardForPlayer", handlePushRewardGame);
-      // removeEventListener("FinishGame", handleUnityApplicationFinish);
     };
   }, [handlePushRewardGame]);
 

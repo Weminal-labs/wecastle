@@ -1,13 +1,5 @@
 import { useEffect, useState, useContext } from "react";
 import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { PlayerInfo } from "../../../type/type";
-import {
-  Aptos,
-  AptosConfig,
-  InputViewFunctionData,
-  Network,
-} from "@aptos-labs/ts-sdk";
-import { MODULE_ADDRESS } from "../../../utils/Var";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import AuthContext from "../../../contexts/AuthProvider";
 
@@ -16,7 +8,6 @@ const RequireAuth = () => {
   const location = useLocation();
   const { connected, isLoading, account } = useWallet();
   const [progress, setProgress] = useState(0);
-  const [checkUpdate, setCheckUpdate] = useState(true);
   const auth = useContext(AuthContext);
 
   useEffect(() => {
@@ -40,12 +31,12 @@ const RequireAuth = () => {
       try {
         if (!auth) return;
 
-        auth.fetchPlayerInfo(address);
-        auth.fetchCreditInfor(address);
+        const result = await auth.fetchPlayerInfo(address);
+
+        if (!result) navigate("/create-account");
+        await auth.fetchCreditInfor(address);
       } catch (error) {
-        console.log(error);
         navigate("/create-account");
-        setCheckUpdate(false);
       }
     }
   };
@@ -65,7 +56,7 @@ const RequireAuth = () => {
     </div>
   );
 
-  if (isLoading) {
+  if (isLoading && !connected) {
     return (
       <div className="flex h-screen flex-col items-center justify-center">
         <div className="m-2 text-xl text-white">Loading...</div>

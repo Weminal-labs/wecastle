@@ -14,6 +14,7 @@ export interface AuthContextType {
   fetchPlayerInfo: (address: string) => Promise<boolean>;
   fetchCreditInfor: (address: string) => Promise<void>;
   CreditInfor: number;
+  isSuccessFetchPlayer: boolean;
 }
 const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -21,6 +22,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const { fetchPlayer } = useGetPlayer();
   const { fetchCredit } = useCredit();
   const { account } = useWallet();
+  const [isSuccessFetchPlayer, setIsSuccessFetchPlayer] = useState(false);
   const [CreditInfor, setCreditInfor] = useState<number>(0);
   const [player, setPlayer] = useState<PlayerInfo>({
     address_id: "",
@@ -42,9 +44,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     if (player) {
       setPlayer(player);
+      setIsSuccessFetchPlayer(true);
       return true;
     }
 
+    setIsSuccessFetchPlayer(false);
     return false;
   };
 
@@ -69,6 +73,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         fetchPlayerInfo,
         fetchCreditInfor,
         CreditInfor,
+        isSuccessFetchPlayer,
       }}
     >
       {children}

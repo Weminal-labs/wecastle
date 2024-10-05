@@ -19,8 +19,6 @@ const LeaderboardModal: React.FC<LeaderboardModalProps> = ({
     null,
   );
 
-  console.log(leaderboard);
-
   useEffect(() => {
     const getLeaderboard = async () => {
       const data = await fetchLeaderBoard(10);
