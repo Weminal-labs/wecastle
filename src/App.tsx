@@ -20,15 +20,14 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route element={<RequireAuth />}>
-            <Route path="/playGame" element={<PlayGame />} />
             <Route path="/create-account" element={<CreateAccount />} />
+            <Route path="/playGame" element={<PlayGame />} />
             <Route path="/task" element={<DailyTask />} />
             <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/docs" element={<Document />} />
             <Route path="/" element={<HomeMobile />} />
           </Route>
         </Route>
-        <Route path="/create-account" element={<CreateAccount />} />
         <Route path="/auth" element={<AuthLayout />}>
           <Route path="login" element={<LoginPage />} />
         </Route>

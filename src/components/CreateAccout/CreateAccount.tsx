@@ -1,18 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Aptos,
   AptosConfig,
   InputViewFunctionData,
   Network,
 } from "@aptos-labs/ts-sdk";
-import {
-  Avatar,
-  Box,
-  CircularProgress,
-  Grid,
-  Modal,
-  Typography,
-} from "@mui/material";
+import { Box, Modal } from "@mui/material";
 
 import { MODULE_ADDRESS } from "../../utils/Var";
 import { useAlert } from "../../contexts/AlertProvider";
@@ -20,6 +13,7 @@ import useContract from "../../hooks/useContract";
 import CustomButton from "../buttons/CustomButton";
 import CustomInput from "../input/CustomInput";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import AuthContext from "../../contexts/AuthProvider";
 
 const CreateAccount = () => {
   const [username, setUsername] = useState<string>("");
@@ -27,34 +21,21 @@ const CreateAccount = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { callContract } = useContract();
   const { setAlert } = useAlert();
-  const { connected, account } = useWallet();
+  const auth = useContext(AuthContext);
+  const { connected, account, isLoading } = useWallet();
+
+  console.log(auth?.isSuccessFetchPlayer);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (account?.address) {
-        try {
-          setLoading(true);
-          const aptosConfig = new AptosConfig({ network: Network.TESTNET });
-          const aptos = new Aptos(aptosConfig);
-          const payload: InputViewFunctionData = {
-            function: `${MODULE_ADDRESS}::gamev1::get_player_info`,
-            functionArguments: [account?.address],
-          };
-          await aptos.view({ payload });
+    if (!auth) return;
 
-          // Handle the response as needed (e.g., set user data)
-          window.location.href = "/";
-        } catch (error) {
-          setLoading(false);
+    if (auth.isSuccessFetchPlayer && connected) {
+      window.location.href = "/";
+      return;
+    }
 
-          console.log(error);
-        }
-      } else {
-        window.location.href = "/auth/login";
-      }
-    };
-    fetchData();
-  }, [account]);
+    if (isLoading && !connected) window.location.href = "/auth/login";
+  }, [auth, auth?.isSuccessFetchPlayer, connected, isLoading]);
 
   const handleSubmit = async () => {
     if (!(username && name)) {
@@ -91,16 +72,16 @@ const CreateAccount = () => {
       <Box
         sx={{
           width: "75vw",
-          background: "#C48D5D",
+          background: "#222222",
           padding: 3,
           position: "absolute",
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          border: "4px solid black",
+          borderRadius: "1rem",
         }}
       >
-        <div className="vt323-regular flex w-full flex-col items-center gap-2">
+        <div className="vt323-regular flex w-full flex-col items-center space-y-4">
           <h1 className="text-2xl text-white">Create your account</h1>
 
           <CustomInput
